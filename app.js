@@ -1,3 +1,5 @@
+const GOOGLE_MAPS_EMBED_API_KEY = "";
+
 const APP_DATA = {
   title: "2026 白沙屯媽祖進香任務地圖",
   strategy: {
@@ -266,13 +268,15 @@ const APP_DATA = {
 
 const state = {
   activeDayId: "day1",
-  map: null,
-  markersLayer: null,
-  polyline: null
+  activeMapFocusId: null
 };
 
 function googleMapsUrl(query) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+function googleMapsEmbedUrl(query) {
+  return `https://www.google.com/maps/embed/v1/search?key=${encodeURIComponent(GOOGLE_MAPS_EMBED_API_KEY)}&q=${encodeURIComponent(query)}`;
 }
 
 function createSummaryPill(label, value) {
@@ -347,8 +351,11 @@ function renderTabs() {
   wrap.querySelectorAll(".tab-button").forEach((button) => {
     button.addEventListener("click", () => {
       state.activeDayId = button.dataset.dayId;
+      state.activeMapFocusId = null;
       renderTabs();
       renderDayPanel();
+      renderMapFocusList();
+      renderMapEmbed();
     });
   });
 }
@@ -431,142 +438,108 @@ function renderAttendanceTable() {
 function renderLegend() {
   const legend = document.getElementById("map-legend");
   legend.innerHTML = [
-    "起點 / 關鍵目標",
-    "每日住宿",
-    "7-11 補給",
-    "自助洗衣",
-    "地址待補會先略過定位"
+    "Google Maps Embed iframe",
+    "建議先鎖定起點、北辰派出所與當日住宿",
+    "每個卡片都保留 Google 導航連結",
+    "沒有完整地址的點位只顯示按鈕，不嵌入地圖"
   ]
     .map((item) => `<div class="legend-item">${item}</div>`)
     .join("");
 }
 
-function pointPopup(point) {
-  const line2 = point.address ? `<div>${point.address}</div>` : "";
-  return `
-    <div>
-      <div class="map-popup-title">${point.name}</div>
-      <div>${point.type}</div>
-      ${line2}
-      <div style="margin-top:8px;">
-        <a href="${googleMapsUrl(point.address || point.query || point.name)}" target="_blank" rel="noreferrer">開啟導航</a>
-      </div>
-    </div>
-  `;
-}
+function getMapFocusOptions() {
+  const activeDay = APP_DATA.days.find((item) => item.id === state.activeDayId) || APP_DATA.days[0];
+  const anchorFocuses = APP_DATA.anchorPoints.map((point) => ({
+    id: point.id,
+    label: point.name,
+    meta: point.type,
+    query: point.query || point.address || point.name
+  }));
 
-async function geocode(query) {
-  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=tw&q=${encodeURIComponent(query)}`;
-  const response = await fetch(url, {
-    headers: {
-      Accept: "application/json"
-    }
-  });
+  const dayFocuses = [];
 
-  if (!response.ok) {
-    throw new Error(`Geocode failed: ${response.status}`);
+  if (activeDay.lodging) {
+    dayFocuses.push({
+      id: `${activeDay.id}-lodging`,
+      label: activeDay.lodging.name,
+      meta: `${activeDay.shortLabel} 住宿`,
+      query: activeDay.lodging.address || activeDay.lodging.name,
+      hasAddress: Boolean(activeDay.lodging.address)
+    });
   }
 
-  const data = await response.json();
-  if (!data.length) {
-    throw new Error("No geocode result");
-  }
-
-  return [Number(data[0].lat), Number(data[0].lon)];
-}
-
-async function resolvePoints() {
-  const locationPoints = [];
-
-  APP_DATA.anchorPoints.forEach((point) => {
-    locationPoints.push({
-      name: point.name,
-      type: point.type,
-      address: point.address,
-      query: point.query || point.address || point.name,
-      fallback: point.fallback
+  activeDay.spots.forEach((spot, index) => {
+    dayFocuses.push({
+      id: `${activeDay.id}-spot-${index}`,
+      label: spot.name,
+      meta: `${activeDay.shortLabel} ${spot.label}`,
+      query: spot.address || spot.name,
+      hasAddress: Boolean(spot.address)
     });
   });
 
-  APP_DATA.days.forEach((day) => {
-    if (day.lodging) {
-      locationPoints.push({
-        name: `${day.shortLabel} ${day.lodging.name}`,
-        type: day.lodging.label,
-        address: day.lodging.address,
-        query: day.lodging.address || `${day.lodging.name} ${day.date}`,
-        fallback: null
-      });
-    }
-
-    day.spots.forEach((spot) => {
-      locationPoints.push({
-        name: `${day.shortLabel} ${spot.name}`,
-        type: spot.label,
-        address: spot.address,
-        query: spot.address || spot.name,
-        fallback: null
-      });
-    });
-  });
-
-  const resolved = await Promise.all(
-    locationPoints.map(async (point) => {
-      if (!point.address && !point.fallback) {
-        return null;
-      }
-
-      try {
-        const latlng = point.address ? await geocode(point.query) : point.fallback;
-        return { ...point, latlng };
-      } catch (error) {
-        if (point.fallback) {
-          return { ...point, latlng: point.fallback };
-        }
-        return null;
-      }
-    })
-  );
-
-  return resolved.filter(Boolean);
+  return [...anchorFocuses, ...dayFocuses].filter((item) => item.query);
 }
 
-async function initMap() {
-  state.map = L.map("map", {
-    zoomControl: false
-  }).setView([23.9, 120.65], 8);
+function ensureActiveMapFocus() {
+  const focusOptions = getMapFocusOptions();
+  const matched = focusOptions.find((item) => item.id === state.activeMapFocusId);
+  if (matched) return matched;
 
-  L.control
-    .zoom({
-      position: "bottomright"
-    })
-    .addTo(state.map);
+  const preferredDayFocus = focusOptions.find((item) => item.id.startsWith(`${state.activeDayId}-`) && item.hasAddress !== false);
+  const nextFocus = preferredDayFocus || focusOptions[0] || null;
+  state.activeMapFocusId = nextFocus ? nextFocus.id : null;
+  return nextFocus;
+}
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 18,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(state.map);
+function renderMapFocusList() {
+  const wrap = document.getElementById("map-focus-list");
+  const focusOptions = getMapFocusOptions();
+  const activeFocus = ensureActiveMapFocus();
 
-  state.markersLayer = L.layerGroup().addTo(state.map);
+  wrap.innerHTML = focusOptions
+    .map(
+      (item) => `
+        <button class="focus-chip ${activeFocus && item.id === activeFocus.id ? "active" : ""}" data-focus-id="${item.id}">
+          ${item.label}｜${item.meta}
+        </button>
+      `
+    )
+    .join("");
 
-  const points = await resolvePoints();
-  const latlngs = [];
-
-  points.forEach((point) => {
-    const marker = L.marker(point.latlng).addTo(state.markersLayer);
-    marker.bindPopup(pointPopup(point));
-    latlngs.push(point.latlng);
+  wrap.querySelectorAll(".focus-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.activeMapFocusId = button.dataset.focusId;
+      renderMapFocusList();
+      renderMapEmbed();
+    });
   });
+}
 
-  if (latlngs.length) {
-    state.polyline = L.polyline(latlngs, {
-      color: "#c3562b",
-      weight: 4,
-      opacity: 0.82,
-      dashArray: "10 8"
-    }).addTo(state.map);
-    state.map.fitBounds(L.latLngBounds(latlngs), { padding: [28, 28] });
+function renderMapEmbed() {
+  const iframe = document.getElementById("map-embed");
+  const emptyState = document.getElementById("map-empty-state");
+  const activeFocus = ensureActiveMapFocus();
+
+  if (!GOOGLE_MAPS_EMBED_API_KEY) {
+    iframe.hidden = true;
+    emptyState.hidden = false;
+    return;
   }
+
+  if (!activeFocus) {
+    iframe.hidden = true;
+    emptyState.hidden = false;
+    emptyState.innerHTML = `
+      <strong>目前沒有可嵌入的地點</strong>
+      <p>請先補上地址，或切換到有地址的當日任務點。</p>
+    `;
+    return;
+  }
+
+  emptyState.hidden = true;
+  iframe.hidden = false;
+  iframe.src = googleMapsEmbedUrl(activeFocus.query);
 }
 
 function init() {
@@ -577,7 +550,8 @@ function init() {
   renderDayPanel();
   renderAttendanceTable();
   renderLegend();
-  initMap();
+  renderMapFocusList();
+  renderMapEmbed();
 }
 
 document.addEventListener("DOMContentLoaded", init);

@@ -14,12 +14,6 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Cormorant+Garamond:wght@600&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -46,9 +40,22 @@
               <p class="section-kicker">Mission Map</p>
               <h2 id="route-map">任務地圖</h2>
             </div>
-            <p class="section-note">點地標可直接導航，首次載入會嘗試依地址定位。</p>
+            <p class="section-note">使用 Google Maps Embed，切換焦點即可看當前任務地點。</p>
           </div>
-          <div id="map"></div>
+          <div class="map-frame-wrap">
+            <iframe
+              id="map-embed"
+              title="白沙屯媽祖進香任務地圖"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+            <div class="map-empty-state" id="map-empty-state" hidden>
+              <strong>尚未設定 Google Maps Embed API key</strong>
+              <p>請在 <code>work/mazu/app.js</code> 內填入 <code>GOOGLE_MAPS_EMBED_API_KEY</code>，GitHub Pages 就能顯示嵌入地圖。</p>
+            </div>
+          </div>
+          <div class="map-focus-list" id="map-focus-list"></div>
           <div class="map-legend" id="map-legend"></div>
         </section>
 
@@ -94,11 +101,6 @@
       </main>
     </div>
 
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
     <script src="./app.js"></script>
   </body>
 </html>
