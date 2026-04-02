@@ -3,7 +3,7 @@
 ## 專案簡介
 
 2026 白沙屯媽祖進香任務地圖，純靜態網站（HTML + CSS + JS），部署在 GitHub Pages。
-線上網址：`https://ginoliang1130.github.io/mazu/`
+線上網址：`https://ginoliang1130.github.io/baishatun-mazu/`
 
 ## 角色定位
 

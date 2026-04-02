@@ -1,6 +1,6 @@
 # mazu — 2026 白沙屯媽祖進香任務地圖
 
-線上網址：[ginoliang1130.github.io/mazu](https://ginoliang1130.github.io/mazu/)
+線上網址：[ginoliang1130.github.io/baishatun-mazu](https://ginoliang1130.github.io/baishatun-mazu/)
 
 ---
 
@@ -29,16 +29,9 @@
 
 ## 本專案說明
 
-這是一個針對 2026 年（乙巳年）進香設計的私人任務地圖，整合每日里程策略、住宿補給點、互動地圖與團員出席表，方便香燈腳隊伍在步行中快速查閱。
+這是一個針對 2026 年（丙午年）進香設計的私人任務地圖，整合每日里程策略、住宿補給點、互動地圖與團員出席表，方便香燈腳隊伍在步行中快速查閱。
 
-### 技術
-
-- 純靜態網站（HTML / CSS / JavaScript），無框架、無 build 步驟
-- 部署於 GitHub Pages，推送 `main` branch 自動上線
-
-### GitHub Pages Secret
-
-部署 workflow 在 build 時將 `GOOGLE_MAPS_EMBED_API_KEY` secret 注入 `app.js`，API key 不存入原始碼。
+純靜態網站（HTML / CSS / JavaScript），無框架、無 build 步驟，部署於 GitHub Pages，推送 `main` branch 自動上線。
 
 ---
 
