@@ -1,4 +1,4 @@
-const GOOGLE_MAPS_EMBED_API_KEY = "";
+const GOOGLE_MAPS_EMBED_API_KEY = "AIzaSyA89Q4TFE4YhHgNafvv_U84t-XGF_HRxxU";
 
 const APP_DATA = {
   title: "2026 白沙屯媽祖進香任務地圖",
