@@ -74,7 +74,7 @@ app.js       — 所有邏輯與資料（APP_DATA、render 函式、state）
 
 ## 未來功能評估
 
-- 天氣預報（Open-Meteo，免費無需 key）
+- 天氣預報（Open-Meteo，免費無需 key）（已新增）
 - 緊急聯絡 / 醫療站標記
 - 快速分享位置給隊友（Line/WhatsApp）
 
@@ -85,6 +85,15 @@ app.js       — 所有邏輯與資料（APP_DATA、render 函式、state）
 - 每次修改都要更新專案指引（CLAUDE.md），記錄修正、新增了什麼
 
 ## 變更紀錄
+
+### 2026-04-02（續五）
+- **更新** 里程精算：Day1 43.5K、Day2 42.5K、Day3 44K、虎尾→北港 19.5K，去程 149.5K
+- **更新** 回程 104K，全程 253.5K（strategy.totalReturnKm）
+- **新增** `strategy.marchRows` 八天行軍總表資料
+- **新增** 每天 `strategy` 欄位（關鍵時間節點），顯示於 day panel info-card 下方
+- **新增** 走路策略 card 內可展開的行軍總表（`<details>` + `renderMarchTable()`）
+- **更新** strategy callout 改為「不預測媽祖路線，堅定走自己的香路」
+- **更新** stat board：全程 253.5K、Day3 半夜 23:30 起步、嚴禁猜測媽祖路線
 
 ### 2026-04-02（續四）
 - **修正** 預設 tab 從 Day 1 改為 Day 0

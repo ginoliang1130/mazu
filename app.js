@@ -5,13 +5,23 @@ const APP_DATA = {
   strategy: {
     headline: "凌晨比媽祖早到北辰派出所",
     summary:
-      "因為 Day 3 在虎尾有最後一個可洗澡小休的中繼站，前三天都要多推一些，Day 3 之後再從虎尾推進北港約 22K。",
-    totalReturnKm: 145,
+      "不預測媽祖路線，堅定走自己的香路。前三天平均 43K，Day 3 半夜 23:30 從虎尾起步，04:30 卡位北辰派出所。",
+    totalReturnKm: 104,
     milestones: [
-      { label: "Day 1", targetKm: 42, walkingHours: 11, note: "拱天宮 -> 梧棲寄居蟹" },
-      { label: "Day 2", targetKm: 37, walkingHours: 10, note: "寄居蟹 -> 彰化華宿行館" },
-      { label: "Day 3", targetKm: 46, walkingHours: 12, note: "彰化 -> 虎尾阿利亞民宿" },
-      { label: "虎尾 -> 北港", targetKm: 22, walkingHours: 6, note: "從虎尾中繼站一路推進北港" }
+      { label: "Day 1", targetKm: 43.5, walkingHours: 11, note: "白沙屯 → 大甲 → 梧棲" },
+      { label: "Day 2", targetKm: 42.5, walkingHours: 11, note: "梧棲 → 彰化 → 員林" },
+      { label: "Day 3", targetKm: 44, walkingHours: 11, note: "員林 → 西螺 → 虎尾" },
+      { label: "虎尾 → 北港", targetKm: 19.5, walkingHours: 5, note: "虎尾 → 土庫 → 元長 → 北辰派出所" }
+    ],
+    marchRows: [
+      { day: "D0-D1", route: "白沙屯 ➔ 大甲 ➔ 梧棲",        km: 43.5, cumKm: 43.5,  tip: "22:00 提前起步，09:00 大甲起步，中午進梧棲" },
+      { day: "D2",    route: "梧棲 ➔ 彰化 ➔ 員林",           km: 42.5, cumKm: 86.0,  tip: "00:00 出發，11:30 進駐員林補眠，躲避烈日" },
+      { day: "D3",    route: "員林 ➔ 西螺 ➔ 虎尾",           km: 44.0, cumKm: 130.0, tip: "01:00 過西螺大橋，12:30 前到虎尾民宿" },
+      { day: "D4",    route: "虎尾 ➔ 北港北辰派出所",         km: 19.5, cumKm: 149.5, tip: "⚠️ 23:30 虎尾起步，04:30 卡位北辰，配戴強光燈" },
+      { day: "D5",    route: "北港 ➔ 烏日（赫絲珀）",         km: 33.0, cumKm: 182.5, tip: "刈火後起駕，入住烏日修復體力" },
+      { day: "D6",    route: "烏日 ➔ 梧棲（寄居蟹）",         km: 24.0, cumKm: 206.5, tip: "避開雙媽會擁擠段，回棲身處大休" },
+      { day: "D7",    route: "梧棲 ➔ 通霄（阿瓜家）",         km: 36.5, cumKm: 243.0, tip: "進入家鄉段，最後體能燃燒" },
+      { day: "D8",    route: "通霄 ➔ 白沙屯拱天宮",           km: 10.5, cumKm: 253.5, tip: "陪媽祖走完最後一哩路，回宮安座" }
     ],
     segments: [
       "拱天宮 -> 寄居蟹",
@@ -46,6 +56,7 @@ const APP_DATA = {
       title: "去程啟程",
       focus: "集合、整裝、熱身",
       note: "出發日，為隔天正式推進做準備。",
+      strategy: "22:00 提前起步，不理會登轎。明天 09:00 在大甲起跑。",
       coords: [24.493, 120.679],
       lodging: null,
       spots: []
@@ -58,6 +69,7 @@ const APP_DATA = {
       title: "第一波衝刺",
       focus: "42K 起手式",
       note: "第一晚住宿在梧棲，順手把超商與洗衣點收好。",
+      strategy: "09:00 大甲起步，12:00 抵達梧棲。",
       coords: [24.301, 120.518],
       lodging: {
         name: "梧棲寄居蟹",
@@ -85,6 +97,7 @@ const APP_DATA = {
       title: "續推彰化",
       focus: "第二天 37K",
       note: "第二晚落腳彰化，補給以市區步調為主。",
+      strategy: "00:00 準時出發，先過大肚溪橋（彰化瓶頸）。11:30 進駐旅館，下午強制補眠。",
       coords: [24.079, 120.535],
       lodging: {
         name: "華宿行旅",
@@ -116,7 +129,8 @@ const APP_DATA = {
       weekday: "三",
       title: "虎尾關鍵中繼",
       focus: "46K + 虎尾到北港 22K",
-      note: "這一晚是進北港前的最後中繼站，可洗澡小休，僅一間房。從虎尾再往北港推進，抓 22K 比較接近實際任務感。",
+      note: "這一晚是進北港前的最後中繼站，可洗澡小休，僅一間房。01:00 過西螺大橋，12:30 前抵達。",
+      strategy: "⚠️ 23:30（今晚）從虎尾起步，經土庫、元長進北港，04:30 卡位北辰派出所。深夜路段昏暗，務必配戴強光燈具。",
       coords: [23.711, 120.430],
       lodging: {
         name: "阿利亞民宿",
@@ -144,6 +158,7 @@ const APP_DATA = {
       title: "北港",
       focus: "北辰派出所達陣",
       note: "住宿暫定在大維哥家或嘉義市，先把北港補給點記住。",
+      strategy: "目標只有「北辰派出所」，嚴禁猜測媽祖路線。神轎可能在土庫或元長繞很久，你們不要等。",
       coords: [23.571, 120.304],
       lodging: {
         name: "大維哥家 or 嘉義市",
@@ -324,19 +339,50 @@ function createSummaryPill(label, value) {
 function renderStrategyBoard() {
   const board = document.getElementById("strategy-board");
   const goingKm = APP_DATA.strategy.milestones.reduce((sum, item) => sum + item.targetKm, 0);
-  const roundTripKm = goingKm + APP_DATA.strategy.totalReturnKm;
+  const totalKm = goingKm + APP_DATA.strategy.totalReturnKm;
   board.innerHTML = `
     <div class="stat-chip">
-      <strong>去程 ${goingKm}K・來回約 ${roundTripKm}K</strong>
-      <span>42 + 37 + 46 + 22 去程，回程估算約 ${APP_DATA.strategy.totalReturnKm}K。</span>
+      <strong>全程 ${totalKm} K</strong>
+      <span>去程 ${goingKm}K・回程 ${APP_DATA.strategy.totalReturnKm}K，共 253.5 公里。</span>
     </div>
     <div class="stat-chip">
-      <strong>Day 3 虎尾中繼</strong>
-      <span>阿利亞民宿是進北港前最後能洗澡小休的關鍵節點。</span>
+      <strong>Day 3 半夜 23:30 起步</strong>
+      <span>從虎尾出發，04:30 前卡位北辰派出所。</span>
     </div>
     <div class="stat-chip">
-      <strong>目標：比媽祖早到北辰派出所</strong>
-      <span>凌晨推進北港，把節奏抓在自己手上。</span>
+      <strong>嚴禁猜測媽祖路線</strong>
+      <span>堅定走自己的香路，目標只有北辰派出所。</span>
+    </div>
+  `;
+}
+
+function renderMarchTable() {
+  const wrap = document.getElementById("march-table");
+  if (!wrap) return;
+  wrap.innerHTML = `
+    <div class="march-table-scroll">
+      <table class="march-table">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>路段</th>
+            <th>里程</th>
+            <th>累計</th>
+            <th>策略重點</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${APP_DATA.strategy.marchRows.map((row) => `
+            <tr>
+              <td><strong>${row.day}</strong></td>
+              <td>${row.route}</td>
+              <td>${row.km} K</td>
+              <td>${row.cumKm} K</td>
+              <td class="march-tip">${row.tip}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
     </div>
   `;
 }
@@ -435,6 +481,7 @@ function renderDayPanel() {
       <div class="info-card">
         <h3>${day.shortLabel}｜${day.title}</h3>
         <p>${day.note}</p>
+        ${day.strategy ? `<p class="day-strategy-note">${day.strategy}</p>` : ""}
       </div>
       <div class="detail-grid">
         ${detailItems.length ? detailItems.map(renderLocationCard).join("") : '<article class="detail-card"><h3>當日任務</h3><p>今天以移動與整隊為主，暫無固定補給點。</p></article>'}
@@ -730,6 +777,7 @@ function renderMapEmbed() {
 function init() {
   renderStrategyBoard();
   renderDistancePlan();
+  renderMarchTable();
   renderSegments();
   renderTabs();
   renderDayPanel();
