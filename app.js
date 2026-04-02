@@ -278,11 +278,7 @@ function googleMapsUrl(query) {
 }
 
 function googleMapsEmbedUrl(query) {
-  return `https://www.google.com/maps/embed/v1/search?key=${encodeURIComponent(GOOGLE_MAPS_EMBED_API_KEY)}&q=${encodeURIComponent(query)}`;
-}
-
-function hasGoogleMapsApiKey() {
-  return Boolean(GOOGLE_MAPS_EMBED_API_KEY) && !GOOGLE_MAPS_EMBED_API_KEY.includes("__GOOGLE_MAPS_EMBED_API_KEY__");
+  return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
 }
 
 function createSummaryPill(label, value) {
@@ -620,11 +616,6 @@ function renderMapFocusList() {
 function renderMapEmbed() {
   const iframe = document.getElementById("map-embed");
   const activeFocus = ensureActiveMapFocus();
-
-  if (!hasGoogleMapsApiKey()) {
-    iframe.hidden = true;
-    return;
-  }
 
   if (!activeFocus) {
     iframe.hidden = true;
