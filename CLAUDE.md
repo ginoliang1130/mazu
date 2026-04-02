@@ -106,6 +106,7 @@ app.js       — 所有邏輯與資料（APP_DATA、render 函式、state）
 - **修正** `deploy-pages.yml`：`FIREBASE_CONFIG` 改用 Python 替換，sed 只處理 Google Maps key；`FIREBASE_CONFIG_STR` 改用 backtick 字串，避免 JSON 雙引號破壞 JS 語法
 - **新增** `isTrackerEnabled()`：定位追蹤功能在 4/12 00:00 (UTC+8) 前顯示「即將開放」，不顯示 overlay 也不啟動 Firebase
 - **資安** Firebase Database Rules 改為 14 位團員 id 明確 allowlist（`locations/佛祖球球`、`locations/Tina_媽` 等），拒絕任意 node 寫入
+- **調整** 定位追蹤 card 移至任務地圖上方（點擊 chip 後直接看地圖更順手）
 - **修正** strategy 文字換行：渲染時將 `\n` 轉為 `<br>` 讓排版正確顯示
 - **修正** 去程策略文字移除「深夜趕路」（全團統一行動，無深夜趕路）
 - **修正** `renderAttendanceCell` 未使用的 `member` 參數改為 `_member`
