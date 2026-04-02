@@ -855,7 +855,7 @@ function memberIdFromName(name) {
 }
 
 function initFirebase() {
-  if (!FIREBASE_CONFIG_STR || FIREBASE_CONFIG_STR.includes("__FIREBASE_CONFIG__")) return;
+  if (!FIREBASE_CONFIG_STR) return;
   try {
     const config = JSON.parse(FIREBASE_CONFIG_STR);
     firebase.initializeApp(config);
