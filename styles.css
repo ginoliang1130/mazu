@@ -16,6 +16,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -89,6 +93,7 @@ a {
   font-size: clamp(2.2rem, 9vw, 4.6rem);
   font-family: "Cormorant Garamond", serif;
   font-weight: 600;
+  max-width: 7ch;
 }
 
 .hero-text,
@@ -252,6 +257,31 @@ a {
   transform: translateY(-1px);
 }
 
+.attendance-toggle {
+  display: inline-grid;
+  place-items: center;
+  gap: 6px;
+}
+
+.attendance-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.attendance-note {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.attendance-name {
+  font-weight: 700;
+}
+
 .strategy-callout {
   padding: 16px 18px;
   border-radius: 18px;
@@ -410,29 +440,6 @@ td:first-child {
   background: rgba(255, 250, 241, 0.98);
 }
 
-.status-on {
-  color: #1b5e3d;
-  font-weight: 800;
-}
-
-.status-soft {
-  color: #8a5a10;
-  font-weight: 700;
-}
-
-.status-off {
-  color: #b7aa9f;
-}
-
-.leaflet-popup-content {
-  line-height: 1.6;
-}
-
-.map-popup-title {
-  font-weight: 800;
-  color: var(--accent-strong);
-}
-
 @media (min-width: 900px) {
   .hero {
     grid-template-columns: 1.45fr 0.95fr;
@@ -444,8 +451,9 @@ td:first-child {
     grid-template-columns: 1.08fr 0.92fr;
   }
 
-  .map-card,
+  .strategy-card,
   .planner-card,
+  .map-card,
   .attendance-card {
     grid-column: span 2;
   }

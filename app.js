@@ -271,6 +271,8 @@ const state = {
   activeMapFocusId: null
 };
 
+const ATTENDANCE_STORAGE_KEY = "mazu-attendance-v1";
+
 function googleMapsUrl(query) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
@@ -403,14 +405,69 @@ function renderDayPanel() {
   `;
 }
 
-function statusClass(value) {
-  if (!value) return "status-off";
-  if (value.includes("佛系")) return "status-soft";
-  return "status-on";
+function buildDefaultAttendanceState() {
+  return APP_DATA.attendance.map((member) =>
+    member.status.map((entry) => ({
+      checked: Boolean(entry),
+      note: entry && entry !== "✅" ? entry.replace(/^✅\s*/, "") : ""
+    }))
+  );
+}
+
+function getAttendanceState() {
+  const fallback = buildDefaultAttendanceState();
+
+  try {
+    const raw = localStorage.getItem(ATTENDANCE_STORAGE_KEY);
+    if (!raw) return fallback;
+
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length !== APP_DATA.attendance.length) {
+      return fallback;
+    }
+
+    return parsed.map((row, memberIndex) =>
+      APP_DATA.attendanceDays.map((_, dayIndex) => {
+        const cell = row?.[dayIndex];
+        const defaultCell = fallback[memberIndex][dayIndex];
+        return {
+          checked: typeof cell?.checked === "boolean" ? cell.checked : defaultCell.checked,
+          note: typeof cell?.note === "string" ? cell.note : defaultCell.note
+        };
+      })
+    );
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function saveAttendanceState(attendanceState) {
+  localStorage.setItem(ATTENDANCE_STORAGE_KEY, JSON.stringify(attendanceState));
+}
+
+function toggleAttendance(memberIndex, dayIndex, checked) {
+  const attendanceState = getAttendanceState();
+  attendanceState[memberIndex][dayIndex].checked = checked;
+  saveAttendanceState(attendanceState);
+}
+
+function renderAttendanceCell(member, memberIndex, dayIndex, cellState) {
+  const inputId = `attendance-${memberIndex}-${dayIndex}`;
+  const note = cellState.note ? `<span class="attendance-note">${cellState.note}</span>` : "";
+
+  return `
+    <td>
+      <label class="attendance-toggle" for="${inputId}">
+        <input id="${inputId}" type="checkbox" data-member-index="${memberIndex}" data-day-index="${dayIndex}" ${cellState.checked ? "checked" : ""} />
+      </label>
+      ${note}
+    </td>
+  `;
 }
 
 function renderAttendanceTable() {
   const table = document.getElementById("attendance-table");
+  const attendanceState = getAttendanceState();
   table.innerHTML = `
     <thead>
       <tr>
@@ -421,11 +478,11 @@ function renderAttendanceTable() {
     <tbody>
       ${APP_DATA.attendance
         .map(
-          (member) => `
+          (member, memberIndex) => `
             <tr>
-              <td>${member.name}</td>
-              ${member.status
-                .map((entry) => `<td class="${statusClass(entry)}">${entry || "—"}</td>`)
+              <td><span class="attendance-name">${member.name}</span></td>
+              ${attendanceState[memberIndex]
+                .map((cellState, dayIndex) => renderAttendanceCell(member, memberIndex, dayIndex, cellState))
                 .join("")}
             </tr>
           `
@@ -433,6 +490,14 @@ function renderAttendanceTable() {
         .join("")}
     </tbody>
   `;
+
+  table.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+    input.addEventListener("change", (event) => {
+      const memberIndex = Number(event.currentTarget.dataset.memberIndex);
+      const dayIndex = Number(event.currentTarget.dataset.dayIndex);
+      toggleAttendance(memberIndex, dayIndex, event.currentTarget.checked);
+    });
+  });
 }
 
 function renderLegend() {
