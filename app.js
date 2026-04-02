@@ -87,7 +87,7 @@ const APP_DATA = {
       note: "第二晚落腳彰化，補給以市區步調為主。",
       coords: [24.079, 120.535],
       lodging: {
-        name: "彰化華宿行館",
+        name: "華宿行旅",
         address: "彰化縣彰化市南瑤路411號",
         label: "住宿"
       },
@@ -95,11 +95,6 @@ const APP_DATA = {
         {
           name: "承攜行旅",
           address: "彰化縣彰化市中正路二段668號",
-          label: "住宿"
-        },
-        {
-          name: "華宿行旅",
-          address: "彰化縣彰化市南瑤路411號",
           label: "住宿"
         },
         {
@@ -560,7 +555,7 @@ async function fetchDayWeather(dayId, lat, lng, dateISO) {
   }
 
   try {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean,weathercode&timezone=Asia%2FTaipei&start_date=${dateISO}&end_date=${dateISO}&forecast_days=16`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean,weathercode&timezone=Asia%2FTaipei&start_date=${dateISO}&end_date=${dateISO}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error();
     const data = await res.json();
