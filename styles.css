@@ -865,6 +865,11 @@ td:first-child {
   font-size: 0.92rem;
 }
 
+.tracker-disabled-note {
+  margin: 0;
+  padding: 12px 0;
+}
+
 .tracker-chip-time {
   font-size: 0.78rem;
   color: var(--muted);

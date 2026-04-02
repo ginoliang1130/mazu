@@ -1005,7 +1005,16 @@ function showMemberOverlay() {
   overlay.hidden = false;
 }
 
+function isTrackerEnabled() {
+  return new Date() >= new Date("2026-04-12T00:00:00+08:00");
+}
+
 function initTrackerCard() {
+  if (!isTrackerEnabled()) {
+    const wrap = document.getElementById("tracker-identity");
+    if (wrap) wrap.innerHTML = '<p class="muted-text tracker-disabled-note">📅 定位追蹤功能將於 4/12 出發當天開放。</p>';
+    return;
+  }
   const identity = getMemberIdentity();
   if (!identity) showMemberOverlay();
   renderTrackerIdentity();
