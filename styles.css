@@ -912,6 +912,12 @@ td:first-child {
   color: var(--muted);
 }
 
+.hero-stat-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 @media (max-width: 899px) {
   .page-shell {
     width: min(100vw - 16px, 100%);
@@ -920,15 +926,52 @@ td:first-child {
 
   .hero {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .hero,
   .card {
     border-radius: 24px;
-    padding: 18px;
+    padding: 16px;
+  }
+
+  .stat-chip strong {
+    font-size: 1rem;
+  }
+
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .distance-plan {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions {
+    gap: 8px;
+  }
+
+  .primary-action,
+  .secondary-action {
+    min-height: 42px;
+    font-size: 0.94rem;
+  }
+
+  .tracker-chips {
+    gap: 8px;
+  }
+
+  .tracker-chip {
+    padding: 8px 12px;
   }
 
   #map-embed {
-    height: 360px;
+    height: 320px;
   }
 }
