@@ -272,6 +272,20 @@ const state = {
 };
 
 const ATTENDANCE_STORAGE_KEY = "mazu-attendance-v1";
+const GEAR_STORAGE_KEY = "mazu-gear-v1";
+
+const GEAR_ITEMS = [
+  "雨衣／雨褲",
+  "頭燈 + 備用電池",
+  "行動電源",
+  "護膝／護踝",
+  "防曬乳",
+  "止痛藥／痠痛貼布",
+  "電解質包",
+  "備用鞋墊",
+  "現金",
+  "健保卡"
+];
 
 function googleMapsUrl(query) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
@@ -452,6 +466,48 @@ function saveAttendanceState(attendanceState) {
   localStorage.setItem(ATTENDANCE_STORAGE_KEY, JSON.stringify(attendanceState));
 }
 
+function getGearState() {
+  try {
+    const raw = localStorage.getItem(GEAR_STORAGE_KEY);
+    if (!raw) return GEAR_ITEMS.map(() => false);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length !== GEAR_ITEMS.length) return GEAR_ITEMS.map(() => false);
+    return parsed;
+  } catch {
+    return GEAR_ITEMS.map(() => false);
+  }
+}
+
+function saveGearState(state) {
+  localStorage.setItem(GEAR_STORAGE_KEY, JSON.stringify(state));
+}
+
+function renderGearList() {
+  const wrap = document.getElementById("gear-list");
+  const gearState = getGearState();
+
+  wrap.innerHTML = GEAR_ITEMS.map((item, index) => `
+    <label class="gear-item ${gearState[index] ? "checked" : ""}">
+      <input type="checkbox" data-gear-index="${index}" ${gearState[index] ? "checked" : ""} />
+      <span>${item}</span>
+    </label>
+  `).join("");
+
+  wrap.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+    input.addEventListener("change", (e) => {
+      const gearState = getGearState();
+      gearState[Number(e.currentTarget.dataset.gearIndex)] = e.currentTarget.checked;
+      saveGearState(gearState);
+      renderGearList();
+    });
+  });
+
+  document.getElementById("gear-reset").addEventListener("click", () => {
+    saveGearState(GEAR_ITEMS.map(() => false));
+    renderGearList();
+  });
+}
+
 function toggleAttendance(memberIndex, dayIndex, checked) {
   const attendanceState = getAttendanceState();
   attendanceState[memberIndex][dayIndex].checked = checked;
@@ -597,6 +653,7 @@ function init() {
   renderSegments();
   renderTabs();
   renderDayPanel();
+  renderGearList();
   renderAttendanceTable();
   renderMapFocusList();
   renderMapEmbed();

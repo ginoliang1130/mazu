@@ -381,6 +381,57 @@ a {
   font-size: 0.94rem;
 }
 
+.gear-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.gear-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--paper-strong);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+  font-size: 0.94rem;
+}
+
+.gear-item.checked {
+  background: linear-gradient(135deg, rgba(195, 86, 43, 0.1), rgba(214, 170, 71, 0.14));
+  border-color: rgba(147, 45, 23, 0.28);
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.gear-item input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.gear-reset {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.gear-reset:hover {
+  color: var(--accent-strong);
+  border-color: rgba(147, 45, 23, 0.3);
+}
+
 .table-wrap {
   overflow-x: auto;
 }
@@ -428,6 +479,7 @@ td:first-child {
   .strategy-card,
   .planner-card,
   .map-card,
+  .gear-card,
   .attendance-card {
     grid-column: span 2;
   }
