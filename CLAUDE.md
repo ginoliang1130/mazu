@@ -3,6 +3,7 @@
 ## 專案簡介
 
 2026 白沙屯媽祖進香任務地圖，純靜態網站（HTML + CSS + JS），部署在 GitHub Pages。
+線上網址：`https://ginoliang1130.github.io/mazu/`
 
 ## 檔案結構
 
@@ -23,11 +24,16 @@ app.js       — 所有邏輯與資料（APP_DATA、render 函式、state）
 
 ## Google Maps Embed
 
-- 使用正式 Embed API：`https://www.google.com/maps/embed/v1/search?key=...`
-- API key 需在 GCP Console 的 HTTP referrers 白名單加入 `https://ginoliang1130.github.io/*`
-- 本地開發時 key 是 placeholder，地圖 iframe 會被隱藏，屬正常行為
+- 有 API key 時：使用正式 Embed API `https://www.google.com/maps/embed/v1/search?key=...`
+- 沒有 API key 時（CI 注入失敗或本地開發）：fallback 到 `https://maps.google.com/maps?q=...&output=embed`，地圖仍可正常顯示
+- GCP Console 的 API key HTTP referrers 白名單需包含 `https://ginoliang1130.github.io/*`
+
+## 版面設計注意事項
+
+- `<h1>` 使用 Cormorant Garamond，以 `<br />` 固定兩行排版（白沙屯媽祖進香 / 任務地圖），**不要**加 `max-width` 限制
+- 字體從 Google Fonts 載入，有改動樣式時注意確認字體有正確套用
 
 ## 開發習慣
 
 - 每次修正完直接 `commit` 並 `push`，不需要等確認
-- 版本號在 `index.html` 的 CSS/JS query string（`?v=YYYYMMDD-N`），有改動時一起更新
+- 版本號在 `index.html` 的 CSS/JS query string（`?v=YYYYMMDD-N`），每次有改動時一起遞增，讓瀏覽器強制重拉新檔案
