@@ -165,12 +165,12 @@ a {
   padding: 28px 24px;
   text-align: center;
   font-family: "Cormorant Garamond", serif;
-  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  font-size: clamp(0.88rem, 2.6vw, 1.5rem);
   font-weight: 600;
   color: var(--accent-strong);
   border-top: 1px solid var(--border);
   letter-spacing: 0.04em;
-  line-height: 1.7;
+  white-space: nowrap;
 }
 
 .hero-stat-board {
