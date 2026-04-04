@@ -1036,13 +1036,13 @@ function showMemberOverlay() {
 }
 
 function isTrackerEnabled() {
-  return new Date() >= new Date("2026-04-12T00:00:00+08:00");
+  return new Date() >= new Date("2026-04-12T20:00:00+08:00");
 }
 
 function initTrackerCard() {
   if (!isTrackerEnabled()) {
     const wrap = document.getElementById("tracker-identity");
-    if (wrap) wrap.innerHTML = '<p class="muted-text tracker-disabled-note">📅 定位追蹤功能將於 4/12 出發當天開放。</p>';
+    if (wrap) wrap.innerHTML = '<p class="muted-text tracker-disabled-note">📅 定位追蹤功能將於 4/12 晚上 8 點開放。</p>';
     return;
   }
   const identity = getMemberIdentity();

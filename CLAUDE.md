@@ -109,7 +109,7 @@ app.js       — 所有邏輯與資料（APP_DATA、render 函式、state）
   - 團員 chips 即時顯示：online（有分享）/ stale（30 分鐘以上）/ offline（未分享）；點擊跳地圖
   - Firebase compat SDK 9.23.0 via CDN；`FIREBASE_CONFIG` GitHub Secret 由 Python 注入（解決 sed 無法處理 JSON 引號問題）
 - **修正** `deploy-pages.yml`：`FIREBASE_CONFIG` 改用 Python 替換，sed 只處理 Google Maps key；`FIREBASE_CONFIG_STR` 改用 backtick 字串，避免 JSON 雙引號破壞 JS 語法
-- **新增** `isTrackerEnabled()`：定位追蹤功能在 4/12 00:00 (UTC+8) 前顯示「即將開放」，不顯示 overlay 也不啟動 Firebase
+- **新增** `isTrackerEnabled()`：定位追蹤功能在 4/12 20:00 (UTC+8) 前顯示「即將開放」，不顯示 overlay 也不啟動 Firebase
 - **資安** Firebase Database Rules 改為 14 位團員 id 明確 allowlist（`locations/佛祖球球`、`locations/Tina_媽` 等），拒絕任意 node 寫入
 - **調整** 定位追蹤 card 移至任務地圖上方（點擊 chip 後直接看地圖更順手）
 - **新增** 15 分鐘自動 reload：hero stat-board 下方常駐倒數 chip（15:00 → 0:00），最後 60 秒變紅提醒 + 「立即重整」按鈕
