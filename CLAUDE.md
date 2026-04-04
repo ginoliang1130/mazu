@@ -98,7 +98,7 @@ app.js       — 所有邏輯與資料（APP_DATA、render 函式、state）
 
 ### 2026-04-04
 - **新增** 今日自動切換：`getTodayDayId()` 根據台灣時間（UTC+8）比對 `APP_DATA.days[].date`，初始化時自動跳到當天 tab；進香期外 fallback 到 day0
-- **新增** 黑夜模式：hero `🌙/☀️` 按鈕切換 `html.dark` class，CSS 變數整套覆寫為深色；狀態存 `localStorage`（`mazu-dark-mode-v1`）；v31 調高文字對比、各元件加深色覆寫確保可讀性
+- **新增** 黑夜模式：hero `🌙/☀️` 按鈕切換 `html.dark` class，CSS 變數整套覆寫為深色；狀態存 `localStorage`（`mazu-dark-mode-v1`）；v31 調高文字對比；v32 secondary 按鈕改為 outlined 樣式（border 2px + 透明底）與 primary 一致；dark mode 兩個按鈕一起壓暗
 - **修正** 水平 overflow：`html/body/page-shell` 加 `overflow-x: hidden`；`.hero > *` `.content-grid > *` 加 `min-width: 0`
 
 ### 2026-04-02（Firebase 即時定位 + 策略修正）

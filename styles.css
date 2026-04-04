@@ -245,8 +245,9 @@ a {
 }
 
 .secondary-action {
-  border: 1px solid rgba(147, 45, 23, 0.2);
-  background: rgba(255, 248, 239, 0.82);
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent-strong);
 }
 
 .primary-action:hover {
@@ -258,8 +259,7 @@ a {
 .secondary-action:hover {
   transform: translateY(-2px);
   background: rgba(195, 86, 43, 0.1);
-  border-color: rgba(147, 45, 23, 0.4);
-  box-shadow: 0 6px 16px rgba(147, 45, 23, 0.12);
+  box-shadow: 0 6px 16px rgba(147, 45, 23, 0.18);
 }
 
 .dark-toggle {
@@ -281,9 +281,26 @@ a {
   background: rgba(195, 86, 43, 0.1);
 }
 
+html.dark .primary-action {
+  background: linear-gradient(135deg, #b8522a 0%, #8a2e14 100%);
+}
+
+html.dark .primary-action:hover {
+  background: linear-gradient(135deg, #c45a2e 0%, #9a3318 100%);
+}
+
+html.dark .secondary-action {
+  border-color: #b8522a;
+  color: #e87848;
+}
+
+html.dark .secondary-action:hover {
+  background: rgba(184, 82, 42, 0.12);
+}
+
 html.dark .dark-toggle {
   background: rgba(40, 30, 20, 0.8);
-  border-color: rgba(200, 160, 100, 0.2);
+  border-color: rgba(200, 160, 100, 0.25);
 }
 
 .mini-link:hover {
