@@ -351,7 +351,6 @@ const state = {
 };
 
 const ATTENDANCE_STORAGE_KEY = "mazu-attendance-v1";
-const GEAR_STORAGE_KEY = "mazu-gear-v1";
 
 const GEAR_ITEMS = [
   "雨衣／雨褲",
@@ -625,46 +624,11 @@ function saveAttendanceState(attendanceState) {
   localStorage.setItem(ATTENDANCE_STORAGE_KEY, JSON.stringify(attendanceState));
 }
 
-function getGearState() {
-  try {
-    const raw = localStorage.getItem(GEAR_STORAGE_KEY);
-    if (!raw) return GEAR_ITEMS.map(() => false);
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return GEAR_ITEMS.map(() => false);
-    return GEAR_ITEMS.map((_, i) => typeof parsed[i] === "boolean" ? parsed[i] : false);
-  } catch {
-    return GEAR_ITEMS.map(() => false);
-  }
-}
-
-function saveGearState(state) {
-  localStorage.setItem(GEAR_STORAGE_KEY, JSON.stringify(state));
-}
-
 function renderGearList() {
   const wrap = document.getElementById("gear-list");
-  const gearState = getGearState();
-
-  wrap.innerHTML = GEAR_ITEMS.map((item, index) => `
-    <label class="gear-item ${gearState[index] ? "checked" : ""}">
-      <input type="checkbox" data-gear-index="${index}" ${gearState[index] ? "checked" : ""} />
-      <span>${item}</span>
-    </label>
+  wrap.innerHTML = GEAR_ITEMS.map((item) => `
+    <div class="gear-item">${item}</div>
   `).join("");
-
-  wrap.querySelectorAll('input[type="checkbox"]').forEach((input) => {
-    input.addEventListener("change", (e) => {
-      const gearState = getGearState();
-      gearState[Number(e.currentTarget.dataset.gearIndex)] = e.currentTarget.checked;
-      saveGearState(gearState);
-      renderGearList();
-    });
-  });
-
-  document.getElementById("gear-reset").addEventListener("click", () => {
-    saveGearState(GEAR_ITEMS.map(() => false));
-    renderGearList();
-  });
 }
 
 const weatherCache = {};

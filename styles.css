@@ -75,11 +75,6 @@ html.dark .gear-item {
   background: rgba(48, 35, 24, 0.8);
 }
 
-html.dark .gear-item.checked {
-  background: linear-gradient(135deg, rgba(232, 120, 74, 0.14), rgba(212, 168, 58, 0.12));
-  color: var(--muted);
-}
-
 html.dark .summary-pill,
 html.dark .detail-card,
 html.dark .info-card,
@@ -737,47 +732,11 @@ html.dark .dark-toggle {
 }
 
 .gear-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 16px;
+  padding: 10px 14px;
+  border-radius: 14px;
   border: 1px solid var(--border);
   background: var(--paper-strong);
-  cursor: pointer;
-  transition: background 160ms ease, border-color 160ms ease;
   font-size: 0.94rem;
-}
-
-.gear-item.checked {
-  background: linear-gradient(135deg, rgba(195, 86, 43, 0.1), rgba(214, 170, 71, 0.14));
-  border-color: rgba(147, 45, 23, 0.28);
-  text-decoration: line-through;
-  color: var(--muted);
-}
-
-.gear-item input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.gear-reset {
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-size: 0.88rem;
-  cursor: pointer;
-  transition: color 160ms ease, border-color 160ms ease;
-}
-
-.gear-reset:hover {
-  color: var(--accent-strong);
-  border-color: rgba(147, 45, 23, 0.3);
 }
 
 /* ── Attendance bar chart ────────────────────────── */
