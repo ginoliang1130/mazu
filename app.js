@@ -66,6 +66,7 @@ const APP_DATA = {
       note: "出發日，為隔天正式推進做準備。",
       strategy: "22:00 提前起步，不理會登轎。明天 09:00 在大甲起跑。",
       coords: [24.493, 120.679],
+      cwaLocation: "大甲區",
       lodging: null,
       spots: [
         {
@@ -90,6 +91,7 @@ const APP_DATA = {
       note: "第一晚住宿在梧棲，順手把超商與洗衣點收好。",
       strategy: "09:00 大甲起步，12:00 抵達梧棲。",
       coords: [24.301, 120.518],
+      cwaLocation: "梧棲區",
       lodging: {
         name: "梧棲寄居蟹",
         address: "台中市梧棲區港埠路二段431巷22號",
@@ -118,6 +120,7 @@ const APP_DATA = {
       note: "第二晚落腳彰化，補給以市區步調為主。",
       strategy: "00:00 準時出發，先過大肚溪橋（彰化瓶頸）。11:30 進駐旅館，下午強制補眠。",
       coords: [24.079, 120.535],
+      cwaLocation: "彰化市",
       lodging: {
         name: "華宿行旅",
         address: "彰化縣彰化市南瑤路411號",
@@ -151,6 +154,7 @@ const APP_DATA = {
       note: "這一晚是進北港前的最後中繼站，可洗澡小休，僅一間房。01:00 過西螺大橋，12:30 前抵達。",
       strategy: "當晚 19:00 必須熄燈。23:30 從虎尾起步，經土庫、元長深夜推進，深夜路段昏暗務必配戴強光燈具。",
       coords: [23.711, 120.430],
+      cwaLocation: "虎尾鎮",
       lodging: {
         name: "阿利亞民宿",
         address: "雲林縣虎尾鎮立新街165號",
@@ -179,6 +183,7 @@ const APP_DATA = {
       note: "住宿暫定在大維哥家或嘉義市，先把北港補給點記住。",
       strategy: "終點是北港朝天宮，北辰派出所只是媽祖入廟前的最後休息點。\n\n⚠️ 45 萬人潮分流：\n・守候北辰組：在北辰等媽祖，之後提早撤退至住宿點。\n・衝刺朝天宮組：清晨 5 點直接前往卡位。\n\n嚴禁猜測媽祖路線，神轎可能在土庫或元長繞很久，你們不要等。",
       coords: [23.571, 120.304],
+      cwaLocation: "北港鎮",
       lodging: {
         name: "大維哥家 or 嘉義市",
         address: "",
@@ -206,6 +211,7 @@ const APP_DATA = {
       focus: "半夜自北港出發",
       note: "回程住宿改住烏日高鐵附近，方便調整節奏。",
       coords: [24.002, 120.612],
+      cwaLocation: "烏日區",
       lodging: {
         name: "赫絲珀HSR高鐵行旅",
         address: "台中市烏日區新興路255號",
@@ -228,6 +234,7 @@ const APP_DATA = {
       focus: "回程補給",
       note: "回程再次住寄居蟹，補洗補休一次完成。",
       coords: [24.301, 120.518],
+      cwaLocation: "梧棲區",
       lodging: {
         name: "梧棲寄居蟹",
         address: "台中市梧棲區港埠路二段431巷22號",
@@ -255,6 +262,7 @@ const APP_DATA = {
       focus: "最後整補",
       note: "住宿在阿瓜家，7-11 收件資訊也一併保留。",
       coords: [24.440, 120.667],
+      cwaLocation: "苑裡鎮",
       lodging: {
         name: "阿瓜家",
         address: "",
@@ -278,6 +286,7 @@ const APP_DATA = {
       focus: "任務收尾",
       note: "回宮日，住宿預計回家或續住阿瓜家。",
       coords: [24.493, 120.679],
+      cwaLocation: "大甲區",
       lodging: {
         name: "溫暖的家 or 阿瓜家",
         address: "",
@@ -565,7 +574,7 @@ function renderDayPanel() {
         ${createSummaryPill("日期", `${day.date} (${day.weekday})`)}
         ${createSummaryPill("主題", day.title)}
         ${createSummaryPill("焦點", day.focus)}
-        ${day.coords ? '<div class="summary-pill weather-pill" id="weather-widget"><span class="weather-loading">天氣載入中…</span></div>' : ""}
+        ${day.cwaLocation ? '<div class="summary-pill weather-pill" id="weather-widget"><span class="weather-loading">天氣載入中…</span></div>' : ""}
       </div>
       <div class="info-card">
         <h3>${day.shortLabel}｜${day.title}</h3>
@@ -578,10 +587,10 @@ function renderDayPanel() {
     </section>
   `;
 
-  if (day.coords) {
+  if (day.cwaLocation) {
     const [month, d] = day.date.split("/");
     const dateISO = `2026-${month.padStart(2, "0")}-${d.padStart(2, "0")}`;
-    fetchDayWeather(day.id, day.coords[0], day.coords[1], dateISO);
+    fetchDayWeather(day.id, day.cwaLocation, dateISO);
   }
 }
 
@@ -634,19 +643,18 @@ function renderGearList() {
 
 const weatherCache = {};
 
-function weatherCodeInfo(code) {
-  if (code === 0) return { emoji: "☀️", text: "晴天" };
-  if (code <= 3) return { emoji: "⛅", text: "多雲" };
-  if (code <= 48) return { emoji: "🌫️", text: "有霧" };
-  if (code <= 55) return { emoji: "🌦️", text: "毛毛雨" };
-  if (code <= 65) return { emoji: "🌧️", text: "有雨" };
-  if (code <= 75) return { emoji: "❄️", text: "降雪" };
-  if (code <= 82) return { emoji: "🌦️", text: "陣雨" };
-  if (code <= 86) return { emoji: "❄️", text: "雪陣" };
-  return { emoji: "⛈️", text: "雷雨" };
+function weatherDescToEmoji(desc) {
+  if (!desc) return "🌤️";
+  if (/雷/.test(desc)) return "⛈️";
+  if (/雨/.test(desc)) return "🌧️";
+  if (/陰/.test(desc)) return "☁️";
+  if (/多雲/.test(desc)) return "⛅";
+  if (/霧|煙/.test(desc)) return "🌫️";
+  if (/晴/.test(desc)) return "☀️";
+  return "🌤️";
 }
 
-async function fetchDayWeather(dayId, lat, lng, dateISO) {
+async function fetchDayWeather(dayId, cwaLocation, dateISO) {
   const widget = document.getElementById("weather-widget");
   if (!widget) return;
 
@@ -656,19 +664,37 @@ async function fetchDayWeather(dayId, lat, lng, dateISO) {
   }
 
   try {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean,weathercode&timezone=Asia%2FTaipei&start_date=${dateISO}&end_date=${dateISO}`;
+    const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-093?Authorization=rdec-key-123-45678-011121314&locationName=${encodeURIComponent(cwaLocation)}&elementName=MinT,MaxT,PoP12h,Wx&format=JSON`;
     const res = await fetch(url);
     if (!res.ok) throw new Error();
     const data = await res.json();
-    if (data.error) throw new Error();
-    const daily = data.daily;
-    const idx = daily.time.indexOf(dateISO);
-    if (idx === -1) throw new Error();
+    if (data.success !== "true") throw new Error();
+
+    const locsArr = data.records?.Locations?.[0]?.Location ?? [];
+    const loc = locsArr.find((l) => l.LocationName === cwaLocation);
+    if (!loc) throw new Error();
+
+    function findEl(name) {
+      return (loc.WeatherElement || []).find((e) => e.ElementName === name);
+    }
+    function firstValueOnDate(el, valueKey) {
+      if (!el) return null;
+      const t = (el.Time || []).find((t) => t.StartTime?.slice(0, 10) === dateISO);
+      return t?.ElementValue?.[0]?.[valueKey] ?? null;
+    }
+
+    const minTemp = firstValueOnDate(findEl("MinT"), "Temperature");
+    const maxTemp = firstValueOnDate(findEl("MaxT"), "Temperature");
+    const precipProb = firstValueOnDate(findEl("PoP12h"), "ProbabilityOfPrecipitation");
+    const wxDesc = firstValueOnDate(findEl("Wx"), "Weather");
+
+    if (minTemp == null || maxTemp == null) throw new Error();
+
     const weather = {
-      maxTemp: daily.temperature_2m_max[idx],
-      minTemp: daily.temperature_2m_min[idx],
-      precipProb: daily.precipitation_probability_mean[idx],
-      code: daily.weathercode[idx]
+      maxTemp: parseFloat(maxTemp),
+      minTemp: parseFloat(minTemp),
+      precipProb: precipProb != null ? parseFloat(precipProb) : null,
+      wxDesc: wxDesc || ""
     };
     weatherCache[dayId] = weather;
     renderWeatherWidget(widget, weather);
@@ -678,13 +704,14 @@ async function fetchDayWeather(dayId, lat, lng, dateISO) {
 }
 
 function renderWeatherWidget(widget, weather) {
-  const info = weatherCodeInfo(weather.code);
+  const emoji = weatherDescToEmoji(weather.wxDesc);
+  const precipStr = weather.precipProb != null ? `<span class="weather-precip">降雨 ${Math.round(weather.precipProb)}%</span>` : "";
   widget.innerHTML = `
     <div class="weather-card">
-      <span class="weather-emoji">${info.emoji}</span>
-      <span class="weather-desc">${info.text}</span>
+      <span class="weather-emoji">${emoji}</span>
+      <span class="weather-desc">${weather.wxDesc || "天氣預報"}</span>
       <span class="weather-temp">${Math.round(weather.minTemp)}–${Math.round(weather.maxTemp)}°C</span>
-      <span class="weather-precip">降雨 ${Math.round(weather.precipProb)}%</span>
+      ${precipStr}
     </div>
   `;
 }

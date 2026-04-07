@@ -100,6 +100,7 @@ app.js       — 所有邏輯與資料（APP_DATA、render 函式、state）
 ### 2026-04-07
 - **改版** 出席表改為橫向長條圖（Gantt 風格）：每格點擊 toggle（取消拖拉）；header 顯示日期 + 星期；移除舊 `<table>` 與 `renderAttendanceTable`
 - **新增** 走路策略 D0-D8 各行加上日期 + 星期（`dateMeta` 欄位），同步顯示在里程進度條與行軍總表
+- **改版** 天氣預報資料來源換成中央氣象署 Open Data API（F-D0047-093 鄉鎮7天天氣預報）；使用 `cwaLocation`（鄉鎮名稱）取代 `coords`；`weatherCodeInfo` 改為 `weatherDescToEmoji`（直接解析中文描述）；Authorization 使用 `rdec-key-123-45678-011121314`
 - **新增** 出席表底部新增團員功能（方案 B Firebase 同步）：`members` node 即時同步至所有裝置；新增出席狀態存 `localStorage`（`mazu-extra-attendance-v1`，key 為名字）；有 × 移除按鈕；`renderTrackerChips()` 同步顯示額外團員；CSS 新增 `.ac-footer / .ac-add-form / .ac-add-input / .ac-add-submit / .ac-remove-btn`
 
 ### 2026-04-04
