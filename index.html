@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Cormorant+Garamond:wght@600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260404-32" />
+    <link rel="stylesheet" href="./styles.css?v=20260407-33" />
   </head>
   <body>
     <div id="member-overlay" class="member-overlay" hidden>
@@ -131,11 +131,9 @@
               <p class="section-kicker">Crew Status</p>
               <h2>團員出席表</h2>
             </div>
-            <p class="section-note">可直接勾選出席狀態，瀏覽器會自動記住你目前的勾選結果。</p>
+            <p class="section-note">點擊或拖拉格子調整出席天數，瀏覽器自動儲存。</p>
           </div>
-          <div class="table-wrap">
-            <table id="attendance-table"></table>
-          </div>
+          <div id="attendance-chart" class="attendance-chart"></div>
         </section>
         <div class="blessing-banner">
           願 2026 白沙屯媽祖進香，全團 14 人平安、圓滿、順利！
@@ -145,6 +143,6 @@
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script src="./app.js?v=20260404-30"></script>
+    <script src="./app.js?v=20260407-33"></script>
   </body>
 </html>

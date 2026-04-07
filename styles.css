@@ -780,38 +780,93 @@ html.dark .dark-toggle {
   border-color: rgba(147, 45, 23, 0.3);
 }
 
-.table-wrap {
+/* ── Attendance bar chart ────────────────────────── */
+
+.attendance-chart {
   overflow-x: auto;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 920px;
-  font-size: 0.94rem;
+.ac-grid {
+  display: grid;
+  gap: 6px;
+  min-width: 560px;
 }
 
-thead th {
+.ac-header-row,
+.ac-row {
+  display: grid;
+  grid-template-columns: 72px repeat(var(--ac-cols), 1fr);
+  gap: 5px;
+  align-items: center;
+}
+
+.ac-header-row {
   position: sticky;
   top: 0;
+  background: var(--paper);
   z-index: 1;
-  background: #f7e6c5;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
 }
 
-th,
-td {
-  padding: 12px 10px;
-  border-bottom: 1px solid rgba(88, 57, 39, 0.12);
-  text-align: center;
-  vertical-align: middle;
+.ac-day-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
 }
 
-th:first-child,
-td:first-child {
-  text-align: left;
-  position: sticky;
-  left: 0;
-  background: rgba(255, 250, 241, 0.98);
+.ac-date {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.ac-wd {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.ac-name-col {
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 4px;
+}
+
+.ac-cell {
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 100ms ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ac-cell.on {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+.ac-cell.off {
+  background: var(--border);
+  opacity: 0.35;
+}
+
+.ac-cell:hover {
+  opacity: 0.75;
+}
+
+html.dark .ac-header-row {
+  background: var(--paper);
+}
+
+html.dark .ac-cell.off {
+  background: rgba(220, 180, 120, 0.12);
 }
 
 @media (min-width: 900px) {

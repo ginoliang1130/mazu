@@ -14,14 +14,14 @@ const APP_DATA = {
       { label: "虎尾 → 北港", targetKm: 20.5, walkingHours: 5, note: "虎尾 → 土庫 → 元長 → 北辰 → 朝天宮" }
     ],
     marchRows: [
-      { day: "D0-D1", route: "白沙屯 ➔ 大甲 ➔ 梧棲",      km: 43.5, cumKm: 43.5,  tip: "22:00 提前起步，09:00 大甲起步，中午進梧棲" },
-      { day: "D2",    route: "梧棲 ➔ 彰化 ➔ 員林",         km: 42.5, cumKm: 86.0,  tip: "00:00 出發，先過大肚溪橋，中午進員林補眠" },
-      { day: "D3",    route: "員林 ➔ 西螺 ➔ 虎尾",         km: 44.0, cumKm: 130.0, tip: "01:00 過西螺大橋，12:30 前到虎尾，當晚 19:00 熄燈" },
-      { day: "D4",    route: "虎尾 ➔ 北港朝天宮",           km: 20.5, cumKm: 150.5, tip: "⚠️ 23:30 虎尾起步，北辰為休息點，終點是朝天宮" },
-      { day: "D5",    route: "北港 ➔ 烏日（赫絲珀）",       km: 33.0, cumKm: 183.5, tip: "刈火後起駕，入住烏日修復體力" },
-      { day: "D6",    route: "烏日 ➔ 梧棲（寄居蟹）",       km: 24.0, cumKm: 207.5, tip: "避開雙媽會擁擠段，回棲身處大休" },
-      { day: "D7",    route: "梧棲 ➔ 通霄（阿瓜家）",       km: 36.5, cumKm: 244.0, tip: "進入家鄉段，最後體能燃燒" },
-      { day: "D8",    route: "通霄 ➔ 白沙屯拱天宮",         km: 10.5, cumKm: 254.5, tip: "陪媽祖走完最後一哩路，回宮安座" }
+      { day: "D0-D1", dateMeta: "4/12(日)～4/13(一)", route: "白沙屯 ➔ 大甲 ➔ 梧棲",      km: 43.5, cumKm: 43.5,  tip: "22:00 提前起步，09:00 大甲起步，中午進梧棲" },
+      { day: "D2",    dateMeta: "4/14(二)",          route: "梧棲 ➔ 彰化 ➔ 員林",         km: 42.5, cumKm: 86.0,  tip: "00:00 出發，先過大肚溪橋，中午進員林補眠" },
+      { day: "D3",    dateMeta: "4/15(三)",          route: "員林 ➔ 西螺 ➔ 虎尾",         km: 44.0, cumKm: 130.0, tip: "01:00 過西螺大橋，12:30 前到虎尾，當晚 19:00 熄燈" },
+      { day: "D4",    dateMeta: "4/16(四)",          route: "虎尾 ➔ 北港朝天宮",           km: 20.5, cumKm: 150.5, tip: "⚠️ 23:30 虎尾起步，北辰為休息點，終點是朝天宮" },
+      { day: "D5",    dateMeta: "4/17(五)",          route: "北港 ➔ 烏日（赫絲珀）",       km: 33.0, cumKm: 183.5, tip: "刈火後起駕，入住烏日修復體力" },
+      { day: "D6",    dateMeta: "4/18(六)",          route: "烏日 ➔ 梧棲（寄居蟹）",       km: 24.0, cumKm: 207.5, tip: "避開雙媽會擁擠段，回棲身處大休" },
+      { day: "D7",    dateMeta: "4/19(日)",          route: "梧棲 ➔ 通霄（阿瓜家）",       km: 36.5, cumKm: 244.0, tip: "進入家鄉段，最後體能燃燒" },
+      { day: "D8",    dateMeta: "4/20(一)",          route: "通霄 ➔ 白沙屯拱天宮",         km: 10.5, cumKm: 254.5, tip: "陪媽祖走完最後一哩路，回宮安座" }
     ],
     segments: [
       "拱天宮 -> 寄居蟹",
@@ -431,7 +431,7 @@ function renderMarchTable() {
         <tbody>
           ${APP_DATA.strategy.marchRows.map((row) => `
             <tr>
-              <td><strong>${row.day}</strong></td>
+              <td><strong>${row.day}</strong><div class="mini-label">${row.dateMeta}</div></td>
               <td>${row.route}</td>
               <td>${row.km} K</td>
               <td>${row.cumKm} K</td>
@@ -453,6 +453,7 @@ function renderDistancePlan() {
       (row) => `
         <div class="distance-item">
           <strong>${row.day}</strong>
+          <div class="mini-label">${row.dateMeta}</div>
           <div class="mini-label">${row.route}</div>
           <div class="progress-track">
             <div class="progress-value" style="width:${(row.km / maxKm) * 100}%"></div>
@@ -723,60 +724,103 @@ function renderWeatherWidget(widget, weather) {
   `;
 }
 
-function toggleAttendance(memberIndex, dayIndex, checked) {
-  const attendanceState = getAttendanceState();
-  attendanceState[memberIndex][dayIndex].checked = checked;
-  saveAttendanceState(attendanceState);
+
+const WEEKDAYS = ["日", "一", "二", "三", "四", "五", "六"];
+
+function attendanceDayMeta(label) {
+  const m = label.match(/(\d+)\/(\d+)/);
+  if (!m) return { date: label, wd: "" };
+  const month = parseInt(m[1]);
+  const date = parseInt(m[2]);
+  return { date: `${month}/${date}`, wd: WEEKDAYS[new Date(2026, month - 1, date).getDay()] };
 }
 
-function renderAttendanceCell(_member, memberIndex, dayIndex, cellState) {
-  const inputId = `attendance-${memberIndex}-${dayIndex}`;
-  const note = cellState.note ? `<span class="attendance-note">${cellState.note}</span>` : "";
+let acDragging = false;
+let acFillValue = false;
+let acDragMember = null;
+let acDragState = null;
 
-  return `
-    <td>
-      <label class="attendance-toggle" for="${inputId}">
-        <input id="${inputId}" type="checkbox" data-member-index="${memberIndex}" data-day-index="${dayIndex}" ${cellState.checked ? "checked" : ""} />
-      </label>
-      ${note}
-    </td>
-  `;
-}
+function renderAttendanceChart() {
+  const wrap = document.getElementById("attendance-chart");
+  if (!wrap) return;
 
-function renderAttendanceTable() {
-  const table = document.getElementById("attendance-table");
   const attendanceState = getAttendanceState();
-  table.innerHTML = `
-    <thead>
-      <tr>
-        <th>姓名 / Date</th>
-        ${APP_DATA.attendanceDays.map((day) => `<th>${day}</th>`).join("")}
-      </tr>
-    </thead>
-    <tbody>
-      ${APP_DATA.attendance
-        .map(
-          (member, memberIndex) => `
-            <tr>
-              <td><span class="attendance-name">${member.name}</span></td>
-              ${attendanceState[memberIndex]
-                .map((cellState, dayIndex) => renderAttendanceCell(member, memberIndex, dayIndex, cellState))
-                .join("")}
-            </tr>
-          `
-        )
-        .join("")}
-    </tbody>
+  const cols = APP_DATA.attendanceDays.length;
+
+  wrap.innerHTML = `
+    <div class="ac-grid" style="--ac-cols:${cols}">
+      <div class="ac-header-row">
+        <div class="ac-name-col"></div>
+        ${APP_DATA.attendanceDays.map((label) => {
+          const { date, wd } = attendanceDayMeta(label);
+          return `<div class="ac-day-label"><span class="ac-date">${date}</span><span class="ac-wd">${wd}</span></div>`;
+        }).join("")}
+      </div>
+      ${APP_DATA.attendance.map((member, mi) => `
+        <div class="ac-row">
+          <div class="ac-name-col">${member.name}</div>
+          ${attendanceState[mi].map((cell, di) => `
+            <div class="ac-cell ${cell.checked ? "on" : "off"}" data-mi="${mi}" data-di="${di}" title="${cell.note || ""}"></div>
+          `).join("")}
+        </div>
+      `).join("")}
+    </div>
   `;
 
-  table.querySelectorAll('input[type="checkbox"]').forEach((input) => {
-    input.addEventListener("change", (event) => {
-      const memberIndex = Number(event.currentTarget.dataset.memberIndex);
-      const dayIndex = Number(event.currentTarget.dataset.dayIndex);
-      toggleAttendance(memberIndex, dayIndex, event.currentTarget.checked);
-    });
+  const grid = wrap.querySelector(".ac-grid");
+
+  function cellFromPoint(x, y) {
+    return document.elementFromPoint(x, y)?.closest(".ac-cell");
+  }
+
+  function applyCell(cell) {
+    if (!cell || !acDragState) return;
+    const mi = Number(cell.dataset.mi);
+    const di = Number(cell.dataset.di);
+    if (mi !== acDragMember) return;
+    if (acDragState[mi][di].checked === acFillValue) return;
+    acDragState[mi][di].checked = acFillValue;
+    saveAttendanceState(acDragState);
+    cell.className = `ac-cell ${acFillValue ? "on" : "off"}`;
+    cell.dataset.mi = mi;
+    cell.dataset.di = di;
+  }
+
+  grid.addEventListener("mousedown", (e) => {
+    const cell = e.target.closest(".ac-cell");
+    if (!cell) return;
+    acDragging = true;
+    acDragMember = Number(cell.dataset.mi);
+    acDragState = getAttendanceState();
+    acFillValue = !acDragState[acDragMember][Number(cell.dataset.di)].checked;
+    applyCell(cell);
   });
+
+  grid.addEventListener("mousemove", (e) => {
+    if (!acDragging) return;
+    applyCell(e.target.closest(".ac-cell"));
+  });
+
+  grid.addEventListener("touchstart", (e) => {
+    const t = e.touches[0];
+    const cell = cellFromPoint(t.clientX, t.clientY);
+    if (!cell) return;
+    acDragging = true;
+    acDragMember = Number(cell.dataset.mi);
+    acDragState = getAttendanceState();
+    acFillValue = !acDragState[acDragMember][Number(cell.dataset.di)].checked;
+    applyCell(cell);
+  }, { passive: true });
+
+  grid.addEventListener("touchmove", (e) => {
+    if (!acDragging) return;
+    const t = e.touches[0];
+    applyCell(cellFromPoint(t.clientX, t.clientY));
+  }, { passive: true });
 }
+
+document.addEventListener("mouseup", () => { acDragging = false; acDragMember = null; acDragState = null; });
+document.addEventListener("touchend", () => { acDragging = false; acDragMember = null; acDragState = null; });
 
 
 function getMapFocusOptions() {
@@ -1086,7 +1130,7 @@ function init() {
   initFirebase();
   initTrackerCard();
   renderGearList();
-  renderAttendanceTable();
+  renderAttendanceChart();
   renderMapFocusList();
   renderMapEmbed();
   initAutoReload();

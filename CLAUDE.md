@@ -96,6 +96,10 @@ app.js       — 所有邏輯與資料（APP_DATA、render 函式、state）
 
 ## 變更紀錄
 
+### 2026-04-07
+- **改版** 出席表改為橫向長條圖（Gantt 風格）：每格點擊 toggle，同列拖拉可批次設定；header 顯示日期 + 星期；移除舊 `<table>` 與 `renderAttendanceTable`
+- **新增** 走路策略 D0-D8 各行加上日期 + 星期（`dateMeta` 欄位），同步顯示在里程進度條與行軍總表
+
 ### 2026-04-04
 - **新增** 今日自動切換：`getTodayDayId()` 根據台灣時間（UTC+8）比對 `APP_DATA.days[].date`，初始化時自動跳到當天 tab；進香期外 fallback 到 day0
 - **新增** 黑夜模式：hero `🌙/☀️` 按鈕切換 `html.dark` class，CSS 變數整套覆寫為深色；狀態存 `localStorage`（`mazu-dark-mode-v1`）；v31 調高文字對比；v32 secondary 按鈕改為 outlined 樣式（border 2px + 透明底）與 primary 一致；dark mode 兩個按鈕一起壓暗
