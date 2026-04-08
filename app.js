@@ -695,7 +695,8 @@ async function fetchDayWeather(dayId, cwaDataset, cwaLocation, dateISO) {
 
     const minTemp   = Math.min(...minTemps.map(Number));
     const maxTemp   = Math.max(...maxTemps.map(Number));
-    const precipProb = pops.length ? Math.max(...pops.map(Number)) : null;
+    const numericPops = pops.map(Number).filter((n) => !isNaN(n));
+    const precipProb = numericPops.length ? Math.max(...numericPops) : null;
     const wxDesc    = wxs[0] ?? "";
 
     if (minTemp == null || maxTemp == null) throw new Error();
