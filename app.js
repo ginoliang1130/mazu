@@ -68,16 +68,32 @@ const APP_DATA = {
       coords: [24.493, 120.679],
       cwaDataset: "F-D0047-075", cwaLocation: "大甲區",
       lodging: null,
+      walkingRoute: {
+        label: "Day 0–1 步行路線",
+        origin: "苗栗縣通霄鎮白東里8號",
+        waypoints: ["苗栗縣通霄鎮通苑路三段慈雲寺", "台中市大甲區順天路大甲鎮瀾宮", "台中市大安區無極鎮安宮"],
+        destination: "台中市梧棲區港埠路二段431巷22號"
+      },
       spots: [
         {
-          name: "大甲車站",
-          address: "台中市大甲區順天路40號",
-          label: "大休點"
+          name: "通苑慈雲寺",
+          address: "苗栗縣通霄鎮通苑路三段慈雲寺",
+          label: "14K 休息點"
+        },
+        {
+          name: "大甲鎮瀾宮",
+          address: "台中市大甲區順天路5號",
+          label: "28.5K 大休點"
+        },
+        {
+          name: "無極鎮安宮",
+          address: "台中市大安區海墘里無極鎮安宮",
+          label: "36.5K 休息點"
         },
         {
           name: "梧棲寄居蟹",
           address: "台中市梧棲區港埠路二段431巷22號",
-          label: "今晚目的地"
+          label: "42.5K 今晚目的地"
         }
       ]
     },
@@ -392,6 +408,14 @@ function googleMapsEmbedUrl(query) {
     return `https://www.google.com/maps/embed/v1/search?key=${encodeURIComponent(GOOGLE_MAPS_EMBED_API_KEY)}&q=${encodeURIComponent(query)}`;
   }
   return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+}
+
+function googleMapsDirectionsUrl(origin, waypoints, destination) {
+  if (hasGoogleMapsApiKey()) {
+    const wp = waypoints.join("|");
+    return `https://www.google.com/maps/embed/v1/directions?key=${encodeURIComponent(GOOGLE_MAPS_EMBED_API_KEY)}&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${encodeURIComponent(wp)}&mode=walking&language=zh-TW`;
+  }
+  return `https://maps.google.com/maps?saddr=${encodeURIComponent(origin)}&daddr=${encodeURIComponent(destination)}&output=embed`;
 }
 
 function hasGoogleMapsApiKey() {
@@ -853,6 +877,17 @@ function getMapFocusOptions() {
     });
   }
 
+  if (activeDay.walkingRoute) {
+    const r = activeDay.walkingRoute;
+    dayFocuses.unshift({
+      id: `${activeDay.id}-route`,
+      label: r.label,
+      meta: "步行路線",
+      query: null,
+      directionsUrl: googleMapsDirectionsUrl(r.origin, r.waypoints, r.destination)
+    });
+  }
+
   activeDay.spots.forEach((spot, index) => {
     dayFocuses.push({
       id: `${activeDay.id}-spot-${index}`,
@@ -863,7 +898,7 @@ function getMapFocusOptions() {
     });
   });
 
-  return [...anchorFocuses, ...dayFocuses].filter((item) => item.query);
+  return [...anchorFocuses, ...dayFocuses].filter((item) => item.query || item.directionsUrl);
 }
 
 function ensureActiveMapFocus() {
@@ -912,7 +947,7 @@ function renderMapEmbed() {
   }
 
   iframe.hidden = false;
-  iframe.src = googleMapsEmbedUrl(activeFocus.query);
+  iframe.src = activeFocus.directionsUrl ?? googleMapsEmbedUrl(activeFocus.query);
 }
 
 // ── Firebase real-time location tracking ─────────────────────────────────────
